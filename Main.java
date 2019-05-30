@@ -57,6 +57,8 @@ public class Main {
 						}else {
 							dsnv.add(new NhanVienThuong(nvMoi.getMaNV(),nvMoi.getHoTen(),nvMoi.getSdt(),nvMoi.getNgayLamViec(),nvMoi.getLuongNgay(), maTP));
 						}
+						//loc ra truongphong trong dsnv;
+						locDanhSachTP(dsnv,dstp);
 					}
 					
 					break;
@@ -148,6 +150,29 @@ public class Main {
 		System.out.println("!Da thoat chuong trinh");
 	}
 	
+	private static void locDanhSachTP(List<NhanVienThuong> dsnv, List<TruongPhong> dstp) {
+		//tim id truong phong trong dsnv, thay thi lay ra
+		//tim id truong phong trong dstp, ko thay thi bo vo
+		boolean existTP = false;
+		for(NhanVienThuong nhanvien: dsnv) {
+			existTP = false;
+			if(!nhanvien.getMaTruongPhong().equals("-1")) {				
+				for(TruongPhong tphong: dstp) {
+					if(nhanvien.getMaTruongPhong().equals(tphong.getMaNV())) {
+						existTP = true;
+					}
+				}
+				if(existTP) {
+					
+				}else {		
+					dstp.add(new TruongPhong(nhanvien.getMaNV(), nhanvien.getHoTen(), 
+							nhanvien.getSdt(), nhanvien.getNgayLamViec(), nhanvien.getLuongNgay(), 1));
+				}
+			}
+		}
+		//loop trong dstp, loop trong dsnv, dem so luong nv co maTP do set tp.soluongnv
+	}
+
 	private static void tinhLuongGD(List<GiamDoc> dsgd, CongTy cty) {
 		for(GiamDoc gd: dsgd) {
 			gd.TongLuong = gd.NgayLamViec*gd.LuongNgay + (gd.getCoPhan())/100*(cty.DoanhThuThang - cty.LuongNhanVien);
