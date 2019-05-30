@@ -46,8 +46,8 @@ public class Main {
 				System.out.println("3. Xoa nhan vien");
 				String chon = scan.nextLine();
 				System.out.println("1. Nhan vien thuong");
-				System.out.println("1. Truong phong");
-				System.out.println("1. Giam doc");
+				System.out.println("2. Truong phong");
+				System.out.println("3. Giam doc");
 				String role = scan.nextLine();
 				switch (chon) {
 				case "1":// them nhan vien
@@ -86,7 +86,7 @@ public class Main {
 							if(id.equals(dsnv.get(i).getMaNV())) {
 								System.out.println("Nhap ma truong phong moi: ");
 								String maTP = scan.nextLine();
-								dsnv.set(i, new NhanVienThuong(editNV.getMaNV(), editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), maTP));
+								dsnv.set(i, new NhanVienThuong(id, editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), maTP));
 								break;
 							}
 						}
@@ -96,7 +96,7 @@ public class Main {
 							if(id.equals(dstp.get(i).getMaNV())) {
 								System.out.println("Nhap so luong nhan vien duoi quyen moi: ");
 								int nhanvien = Integer.parseInt(scan.nextLine());
-								dstp.set(i, new TruongPhong(editNV.getMaNV(), editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), nhanvien));
+								dstp.set(i, new TruongPhong(id, editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), nhanvien));
 								break;
 							}
 						}
@@ -106,7 +106,7 @@ public class Main {
 							if(id.equals(dsgd.get(i).getMaNV())) {
 								System.out.println("Nhap so co phan moi: ");
 								int cophan = Integer.parseInt(scan.nextLine());
-								dsgd.set(i, new GiamDoc(editNV.getMaNV(), editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), cophan));
+								dsgd.set(i, new GiamDoc(id, editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), cophan));
 								break;
 							}
 						}
