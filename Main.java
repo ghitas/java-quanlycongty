@@ -13,12 +13,15 @@ public class Main {
 		List<GiamDoc> dsgd = new ArrayList<GiamDoc>();
 
 		CongTy cty = new CongTy("default", "911911", 10000000);
-		dsnv.add(new NhanVienThuong("001", "thanh", "123", 20, 100, "002"));
-		dsnv.add(new NhanVienThuong("003", "truongPhong", "1123", 30, 100, "002"));
-		dsnv.add(new NhanVienThuong("004", "hoa", "169", 22, 100, "002"));
-		dstp.add(new TruongPhong("002","boss1","113",3,300,3));
-		dstp.add(new TruongPhong("005","boss2","113",10,300,0));
-		dstp.add(new TruongPhong("006","boss3","113",30,300,0));
+		dsnv.add(new NhanVienThuong("001", "thanh", "123", 20, 100, "007"));
+		dsnv.add(new NhanVienThuong("002", "truong", "1123", 30, 100, "008"));
+		dsnv.add(new NhanVienThuong("003", "phong", "1123", 30, 100, "-1"));
+		dsnv.add(new NhanVienThuong("004", "phong", "1123", 30, 100, "-1"));
+		dsnv.add(new NhanVienThuong("005", "hoa", "169", 22, 100, "007"));
+		dsnv.add(new NhanVienThuong("006", "hai", "169", 22, 100, "009"));
+		dstp.add(new TruongPhong("007","boss1","113",3,300,3));
+		dstp.add(new TruongPhong("008","boss2","113",10,300,0));
+		dstp.add(new TruongPhong("009","boss3","113",30,300,0));
 		dsgd.add(new GiamDoc("099", "Giau the", "12908", 12, 1000, 10));
 		dsgd.add(new GiamDoc("100", "Giau qua", "12908", 22, 2000, 20));
 		
@@ -29,7 +32,7 @@ public class Main {
 				System.out.println("1. Nhap thong tin cty");
 				System.out.println("2. Sua thong tin cty");
 				choose = scan.nextLine();
-				if(choose.equals("1")) {
+				if("1".equals(choose)) {
 					cty = NhapThongTinCty();
 				}
 				if(choose.equals("2")) {					
@@ -42,32 +45,106 @@ public class Main {
 				System.out.println("2. Sua nhan vien");
 				System.out.println("3. Xoa nhan vien");
 				String chon = scan.nextLine();
+				System.out.println("1. Nhan vien thuong");
+				System.out.println("1. Truong phong");
+				System.out.println("1. Giam doc");
+				String role = scan.nextLine();
 				switch (chon) {
-				case "1":
-					NhanVien nvMoi = themNhanVien();
-					System.out.println("Nhap ma truong phong:");
-					String maTP = scan.nextLine();
-					System.out.println("Nhap co phan:");
-					String coPhan = scan.nextLine();
-					if(!coPhan.equals(null)) {
-						dsgd.add(new GiamDoc(nvMoi.getMaNV(),nvMoi.getHoTen(),nvMoi.getSdt(),nvMoi.getNgayLamViec(),nvMoi.getLuongNgay(), Integer.parseInt(coPhan)));
-					}else {
-						if(maTP.equals(null)) {		
-							dsnv.add(new NhanVienThuong(nvMoi.getMaNV(),nvMoi.getHoTen(),nvMoi.getSdt(),nvMoi.getNgayLamViec(),nvMoi.getLuongNgay(), "-1"));
-						}else {
-							dsnv.add(new NhanVienThuong(nvMoi.getMaNV(),nvMoi.getHoTen(),nvMoi.getSdt(),nvMoi.getNgayLamViec(),nvMoi.getLuongNgay(), maTP));
+				case "1":// them nhan vien
+					NhanVien nv = themNhanVien();
+					switch (role) {
+					case "1":// them nhan vien thuong
+						System.out.println("Nhap ma truong phong");
+						String truongPhongId = scan.nextLine();
+						dsnv.add(new NhanVienThuong(nv.getMaNV(), nv.getHoTen(), nv.getSdt(), nv.getNgayLamViec(), nv.getLuongNgay(), truongPhongId));
+						for(TruongPhong tp: dstp) {
+							if(truongPhongId.equals(tp.getMaNV())) {
+								tp.setSoNhanVien(tp.getSoNhanVien() + 1);
+								break;
+							}
 						}
+						break;
+					case "2":// them truong phong
+						dstp.add(new TruongPhong(nv.getMaNV(), nv.getHoTen(), nv.getSdt(), nv.getNgayLamViec(), nv.getLuongNgay(), 0));
+						break;
+					case "3":
+						System.out.println("Nhap so co phan: ");
+						int cophan = Integer.parseInt(scan.nextLine());
+						dsgd.add(new GiamDoc(nv.getMaNV(), nv.getHoTen(), nv.getSdt(), nv.getNgayLamViec(), nv.getLuongNgay(), cophan));
+						break;
+					default:
+						break;
 					}
-					
 					break;
-				case "2":
+				case "2":// sua nhan vien
 					System.out.println("Nhap vao ma nhan vien can sua: ");
 					String id = scan.nextLine();
-					for(int i=0;i<dsnv.size();i++) {
-						if(dsnv.get(i).MaNV.equals(id)) {
-							dsnv.set(i,suaNhanVien(dsnv.get(i)));
-							break;
+					NhanVien editNV = suaNhanVien();
+					switch (role) {
+					case "1"://sua nhan vien thuong
+						for(int i=0;i<dsnv.size();i++) {
+							if(id.equals(dsnv.get(i).getMaNV())) {
+								System.out.println("Nhap ma truong phong moi: ");
+								String maTP = scan.nextLine();
+								dsnv.set(i, new NhanVienThuong(editNV.getMaNV(), editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), maTP));
+								break;
+							}
 						}
+						break;
+					case "2"://sua truong phong
+						for(int i=0;i<dstp.size();i++) {
+							if(id.equals(dstp.get(i).getMaNV())) {
+								System.out.println("Nhap so luong nhan vien duoi quyen moi: ");
+								int nhanvien = Integer.parseInt(scan.nextLine());
+								dstp.set(i, new TruongPhong(editNV.getMaNV(), editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), nhanvien));
+								break;
+							}
+						}
+						break;
+					case "3"://sua giam doc
+						for(int i=0;i<dsgd.size();i++) {
+							if(id.equals(dsgd.get(i).getMaNV())) {
+								System.out.println("Nhap so co phan moi: ");
+								int cophan = Integer.parseInt(scan.nextLine());
+								dsgd.set(i, new GiamDoc(editNV.getMaNV(), editNV.getHoTen(),editNV.getSdt(), editNV.getNgayLamViec(), editNV.getLuongNgay(), cophan));
+								break;
+							}
+						}
+						break;
+					default:
+						break;
+					}
+					break;
+				case "3"://xoa nhan vien
+					System.out.println("Nhap vao ma nhan vien can xoa: ");
+					String delID = scan.nextLine();
+					switch (role) {
+					case "1"://xoa nhan vien thuong
+						for(int i=0;i<dsnv.size();i++) {
+							if(delID.equals(dsnv.get(i).getMaNV())) {
+								dsnv.remove(i);
+								break;
+							}
+						}
+						break;
+					case "2"://sua truong phong
+						for(int i=0;i<dstp.size();i++) {
+							if(delID.equals(dstp.get(i).getMaNV())) {
+								dstp.remove(i);
+								break;
+							}
+						}
+						break;
+					case "3"://sua giam doc
+						for(int i=0;i<dsgd.size();i++) {
+							if(delID.equals(dsgd.get(i).getMaNV())) {
+								dsgd.remove(i);
+								break;
+							}
+						}
+						break;
+					default:
+						break;
 					}
 					break;
 				default:
@@ -187,7 +264,7 @@ public class Main {
 		return new NhanVien(maNV, hoten, sdt, ngaylam, luongNgay);
 	}
 	
-	public static NhanVienThuong suaNhanVien(NhanVienThuong NV) {
+	public static NhanVien suaNhanVien() {
 		System.out.println("Nhap ten moi: ");
 		String hoten = scan.nextLine();
 		System.out.println("Nhap so dien thoai moi: ");
@@ -196,9 +273,7 @@ public class Main {
 		int ngaylam = Integer.parseInt(scan.nextLine());
 		System.out.println("Nhap tien cong mot ngay moi: ");
 		int luongNgay = Integer.parseInt(scan.nextLine());
-		System.out.println("Nhap ma truong phong moi");
-		String maTP = scan.nextLine();
-		return new NhanVienThuong(NV.getMaNV(), hoten, sdt, ngaylam, luongNgay, maTP);
+		return new NhanVien(null, hoten, sdt, ngaylam, luongNgay);
 	}
 	public static boolean thoat() {
 		System.out.println("Chon 1 de tro ve, phim bat ki de thoat");
