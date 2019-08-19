@@ -15,5 +15,6 @@ public class GiamDoc extends NhanVien {
 	@Override
 	public void tinhLuong() {
 		this.TongLuong = this.NgayLamViec*this.LuongNgay;
+		System.out.println("testing here");
 	}
 }
